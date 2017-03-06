@@ -1,0 +1,126 @@
+<link rel="import" href="../tangere/tangere.html">
+<link rel="import" href="../at-core-searchbox/at-core-searchbox.html">
+<link rel="import" href="../at-core-activity/at-core-activity.html">
+<link rel="import" href="../at-core-list/at-core-list.html">
+<link rel="import" href="../at-carbon-pager/at-carbon-pager.html">
+
+<dom-module id="at-silver-navlist">
+
+  <style>
+    :host {
+      position: relative;
+      width: 100%;
+      display: block;
+    }
+
+    at-core-searchbox {
+      padding: 16px;
+    }
+
+    at-carbon-pager {
+      padding: 16px;
+    }
+
+  </style>
+
+  <template>
+    <at-core-list id="list" card-width="320" card-height="{{cardHeight}}" layout="{{cardLayout}}" on-list-ready="_listReady"></at-core-list>    
+  </template>
+
+</dom-module>
+
+<script>
+  Polymer({
+    is: "at-silver-navlist",
+    properties: {      
+      itemComponent: {
+        type: String,
+        value: "",
+        notify: true
+      },
+      cardLayout: {
+        type: String,
+        value: "card",
+        xtype: "enum",
+        available: "card,list"
+      },
+      cardHeight: {
+        type: String,
+        value: "100px"
+      },
+      view: {
+        type: String,
+        value: "",
+        notify: true,
+        xtype: "code",
+        mode: "liquid"
+      },
+      value: {
+        type: Object,
+        notify: true,
+        value: null,
+        readOnly: true
+      },
+      navlist: {
+        type: Array,
+        value: function () {
+          return [];
+        },        
+        schema: {
+          items: {
+            type: "object",
+            properties: {
+              title: {
+                type: "string"
+              },
+              url: {
+                type: "string"
+              }
+            }
+          }
+        },
+        layout: 'horizontal',
+        xgridcols: '12',
+        title: 'Navigation Items'
+      }
+    },
+    $meta: [{
+      title: "Navigation List",
+      type: "element",
+      xtype: "at-silver-navlist",
+      icon: "now:chevron",
+      events: ["value-changed"],
+      stateProperties: []
+    }],
+    observers: [
+      'start(itemComponent,view)'
+    ],
+
+    start: function () {
+
+      this.debounce('silver-navlist-start', function () {
+
+        if (!this.view && !this.itemComponent) return;
+
+        this.$.list.clear();
+        if (this.view) {
+          this.$.list.itemComponent = "";
+          this.$.list.view = this.view;
+        } else {
+          this.$.list.view = "";
+          this.$.list.itemComponent = this.itemComponent;
+        }
+
+        // bind list to array data        
+        this.$.list.items = this.navlist;
+
+      }, 100);
+    },
+    _listReady: function () {
+      
+    },
+    ready: function () {
+
+    }
+  });
+</script>

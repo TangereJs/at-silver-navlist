@@ -1,0 +1,8 @@
+{
+  "name": "at-silver-navlist",
+  "version": "0.0.1.12",
+  "private": true,
+  "dependencies": {
+    "polymer": "Polymer/polymer#master"
+  }
+}
